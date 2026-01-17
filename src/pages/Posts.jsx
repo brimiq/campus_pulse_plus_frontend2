@@ -125,3 +125,46 @@ const Posts = () => {
           </div>
         </div>
       </section>
+
+      {/* Posts Grid Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-8">
+          {filteredPosts.length === 0 ? (
+            <div className="text-center py-24 px-8 bg-white rounded-3xl shadow-2xl border border-gray-200 max-w-lg mx-auto">
+              <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-300 rounded-3xl flex items-center justify-center text-gray-400 mx-auto mb-8">
+                📝
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                {searchTerm ? "No posts match your search" : "No posts yet"}
+              </h3>
+              <p className="text-lg text-gray-500 leading-relaxed mb-8">
+                {searchTerm
+                  ? "Try adjusting your search terms or browse all posts"
+                  : "Be the first to share your thoughts and start the conversation!"}
+              </p>
+              {!searchTerm && (
+                <Link
+                  to="/create"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full font-semibold text-base no-underline transition-all hover:from-blue-600 hover:to-blue-700 hover:-translate-y-1 hover:shadow-xl shadow-lg"
+                >
+                  Create First Post
+                </Link>
+              )}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredPosts.map((post) => (
+                <div key={post.id} className="bg-white rounded-3xl overflow-hidden shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1 border border-gray-200">
+                  <PostCard post={post} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+      <Footer />
+    </div>
+  );
+};
+
+export default Posts;
