@@ -21,3 +21,21 @@ export default function PostDetail() {
   useEffect(() => {
     fetchPost();
   }, [id]);
+
+  if (!post) return <p>Loading...</p>;
+
+  return (
+    <div className="max-w-3xl mx-auto p-4 pt-20">
+      <h2 className="text-xl font-bold mb-2">Post Detail</h2>
+      <p>{post.content}</p>
+      <ReactionButtons post={post} refresh={fetchPost} />
+      <CommentList comments={post.comments} refresh={fetchPost} />
+      {user && <CommentForm postId={post.id} refresh={fetchPost} />}
+      {post.admin_response && (
+        <p className="mt-2 text-green-600 font-semibold">
+          Admin: {post.admin_response}
+        </p>
+      )}
+    </div>
+  );
+};
