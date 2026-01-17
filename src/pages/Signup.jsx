@@ -37,3 +37,64 @@ export default function Signup() {
         setIsLoading(false);
         return;
       }
+
+      
+      setUser(resData.user);
+
+      if (resData.role === "admin") window.location.href = "/admin/dashboard";
+      else window.location.href = "/home";
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded shadow w-80"
+      >
+        <h2 className="text-xl font-bold mb-4">Sign Up</h2>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded mb-3 text-sm">
+            {error}
+          </div>
+        )}
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          className="border p-2 w-full mb-3"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          className="border p-2 w-full mb-3"
+        />
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="bg-blue-600 text-white w-full py-2 rounded disabled:opacity-50"
+        >
+          {isLoading ? "Signing up..." : "Sign Up"}
+        </button>
+        <p className="text-sm text-center mt-3">
+          Already have an account?{" "}
+          <Link to="/" className="text-blue-600 underline">
+            Log in
+          </Link>
+        </p>
+      </form>
+    </div>
+  );
+}
+
+      
+
+      
+
