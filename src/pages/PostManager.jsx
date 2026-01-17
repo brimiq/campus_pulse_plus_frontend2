@@ -203,3 +203,105 @@ export default function PostManager() {
             </button>
           </div>
         </div>
+
+        {/* Posts List */}
+        <div className="space-y-4">
+          {filteredPosts.length === 0 ? (
+            <div className="bg-white border-2 border-black rounded-lg p-12 text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                No posts found
+              </h3>
+              <p className="text-gray-600">
+                Try adjusting your search or filter criteria.
+              </p>
+            </div>
+          ) : (
+            filteredPosts.map((post) => (
+              <div
+                key={post.id}
+                className="bg-white border-2 border-black rounded-lg p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-shadow"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      {getStatusBadge(post)}
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
+                        {post.category_name}
+                      </span>
+                      <span className="text-sm text-gray-500 flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        {new Date(post.created_at).toLocaleDateString()}
+                      </span>
+                      <span className="text-sm text-gray-500 flex items-center gap-1">
+                        <User className="h-3 w-3" />
+                        {post.user_email}
+                      </span>
+                    </div>
+
+                    <p className="text-gray-900 font-medium mb-3">
+                      {post.content}
+                    </p>
+
+                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                      <span className="flex items-center gap-1">
+                        <MessageSquare className="h-4 w-4" />
+                        {post.comments_count} comments
+                      </span>
+                      <span className="flex items-center gap-1 text-green-600">
+                        <ThumbsUp className="h-4 w-4" />
+                        {post.likes} upvotes
+                      </span>
+                      <span className="flex items-center gap-1 text-red-600">
+                        <ThumbsDown className="h-4 w-4" />
+                        {post.dislikes} downvotes
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        Total: {post.total_reactions} reactions
+                      </span>
+                    </div>
+
+                    {post.admin_response && (
+                      <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                        <div className="flex items-center gap-2 mb-2">
+                          <CheckCircle className="h-4 w-4 text-green-600" />
+                          <span className="text-sm font-medium text-green-800">
+                            Admin Response
+                          </span>
+                        </div>
+                        <p className="text-sm text-green-700">
+                          {post.admin_response}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2 ml-4">
+                    <Link
+                      to={`/posts/${post.id}`}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                    >
+                      <Eye className="h-4 w-4" />
+                      View
+                    </Link>
+                    <Link
+                      to={`/posts/${post.id}`}
+                      className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                    >
+                      <MessageSquare className="h-4 w-4" />
+                      View Details
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default PostManager;
