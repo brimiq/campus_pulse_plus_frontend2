@@ -107,3 +107,44 @@ export default function PostManager() {
       );
     }
   }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading posts...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 pt-16">
+      {/* Header */}
+      <div className="bg-white border-b-4 border-black shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <Link
+                to="/admin/dashboard"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors mb-4"
+              >
+                ← Back to Dashboard
+              </Link>
+              <h1 className="text-3xl font-black text-gray-900">
+                POST MANAGER
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Review and moderate student content
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-2xl font-bold text-gray-900">
+                {filteredPosts.length}
+              </p>
+              <p className="text-sm text-gray-600">Total Posts</p>
+            </div>
+          </div>
+        </div>
+      </div>
