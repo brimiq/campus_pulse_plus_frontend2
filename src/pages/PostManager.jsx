@@ -67,3 +67,43 @@ export default function PostManager() {
       console.error("Failed to fetch categories:", error);
     }
   }
+
+  function filterPosts() {
+    let filtered = posts.filter((post) => {
+      const matchesSearch = post.content
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        categoryFilter === "all" ||
+        post.category_id === parseInt(categoryFilter);
+
+      let matchesStatus = true;
+      if (statusFilter === "pending") {
+        matchesStatus = !post.admin_response;
+      } else if (statusFilter === "responded") {
+        matchesStatus = !!post.admin_response;
+      }
+
+      return matchesSearch && matchesCategory && matchesStatus;
+    });
+
+    setFilteredPosts(filtered);
+  }
+
+  function getStatusBadge(post) {
+    if (!post.admin_response) {
+      return (
+        <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full flex items-center gap-1">
+          <Clock className="h-3 w-3" />
+          Pending
+        </span>
+      );
+    } else {
+      return (
+        <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full flex items-center gap-1">
+          <CheckCircle className="h-3 w-3" />
+          Responded
+        </span>
+      );
+    }
+  }
