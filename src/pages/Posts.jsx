@@ -4,17 +4,36 @@ import useFetchPosts from "../hooks/useFetchPosts";
 import PostCard from "../components/posts/PostCard";
 import Footer from "../components/layout/Footer";
 
+// Categories for filtering
+const categories = [
+  { id: "all", name: "All Categories" },
+  { id: "facilities", name: "Facilities & Maintenance" },
+  { id: "tech", name: "Tech Issues" },
+  { id: "safety", name: "Safety" },
+  { id: "housing", name: "Housing" },
+];
+
 const Posts = () => {
   const { posts, loading, error } = useFetchPosts();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [sortBy, setSortBy] = useState("newest");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   useEffect(() => {
     if (posts) {
-      let filtered = posts.filter((post) =>
-        post.content.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      let filtered = posts.filter((post) => {
+        // Search filter
+        const matchesSearch = post.content
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+        // Category filter
+        const matchesCategory =
+          categoryFilter === "all" ||
+          post.category_id === categoryFilter ||
+          post.category_name?.toLowerCase().includes(categoryFilter.toLowerCase());
+        return matchesSearch && matchesCategory;
+      });
 
       // Sort posts
       filtered.sort((a, b) => {
@@ -22,13 +41,17 @@ const Posts = () => {
           return new Date(b.created_at) - new Date(a.created_at);
         } else if (sortBy === "oldest") {
           return new Date(a.created_at) - new Date(b.created_at);
+        } else if (sortBy === "most_likes") {
+          return (b.likes || 0) - (a.likes || 0);
+        } else if (sortBy === "most_comments") {
+          return (b.comments_count || 0) - (a.comments_count || 0);
         }
         return 0;
       });
 
       setFilteredPosts(filtered);
     }
-  }, [posts, searchTerm, sortBy]);
+  }, [posts, searchTerm, sortBy, categoryFilter]);
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
@@ -102,8 +125,22 @@ const Posts = () => {
             </div>
 
             {/* Filters Row */}
-            <div className="p-6 flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="flex items-center gap-2">
+            <div className="p-6 flex flex-wrap justify-between items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Category Filter */}
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  className="px-4 py-3 border border-gray-300 rounded-lg bg-white text-sm cursor-pointer transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                >
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Sort Filter */}
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
@@ -111,7 +148,22 @@ const Posts = () => {
                 >
                   <option value="newest">Newest First</option>
                   <option value="oldest">Oldest First</option>
+                  <option value="most_likes">Most Likes</option>
+                  <option value="most_comments">Most Comments</option>
                 </select>
+
+                {/* Clear Filters Button */}
+                {(searchTerm || categoryFilter !== "all") && (
+                  <button
+                    onClick={() => {
+                      setSearchTerm("");
+                      setCategoryFilter("all");
+                    }}
+                    className="px-4 py-3 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Clear Filters
+                  </button>
+                )}
               </div>
 
               <Link
