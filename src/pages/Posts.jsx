@@ -120,7 +120,7 @@ const Posts = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full py-4 pr-4 pl-12 border-2 border-gray-200 rounded-full text-base bg-gray-50 transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:bg-white"
-                />git@github.com:HidayaMohamed/campus_pulse_plus_frontend.git
+                />
               </div>
             </div>
 
