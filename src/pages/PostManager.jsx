@@ -26,6 +26,7 @@ export default function PostManager() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [categories, setCategories] = useState([]);
+
   useEffect(() => {
     fetchPosts();
     fetchCategories();
@@ -302,6 +303,4 @@ export default function PostManager() {
       <Footer />
     </div>
   );
-};
-
-export default PostManager;
+}
