@@ -1,9 +1,10 @@
 import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Signup() {
   const { setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -38,11 +39,10 @@ export default function Signup() {
         return;
       }
 
-      
       setUser(resData.user);
 
-      if (resData.role === "admin") window.location.href = "/admin/dashboard";
-      else window.location.href = "/home";
+      if (resData.role === "admin") navigate("/admin/dashboard");
+      else navigate("/home");
     } catch {
       setError("Network error. Please try again.");
     } finally {
@@ -93,8 +93,3 @@ export default function Signup() {
     </div>
   );
 }
-
-      
-
-      
-
